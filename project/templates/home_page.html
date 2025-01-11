@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Spot System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <h1><i class="fas fa-car"></i> Parking Spot System</h1>
+    </header>
+
+    <!-- Background Effects -->
+    <div class="background-effect"></div>
+    <div class="soft-glow-background"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- System Description Section -->
+        <div class="description">
+            <h2 class="description-title"><i class="fas fa-info-circle"></i> Parking Spot System Overview</h2>
+            <p>
+                The <strong>Parking Spot System</strong> is designed to simplify the search for available parking spaces, especially in crowded areas. It uses advanced geolocation technologies to direct users accurately to the nearest available parking spot based on their current location.
+            </p>
+            <p>
+                The system leverages the <strong>Genetic Algorithm for Resource Allocation</strong>, a powerful artificial intelligence technique that mimics the process of natural selection. This algorithm optimizes the distribution of parking spots to minimize the distance between users and the nearest available spot.
+            </p>
+            <p>
+                By addressing common issues associated with urban congestion, the system enhances user experience and reduces traffic pressure. It ensures better resource utilization and provides convenience for users at every step.
+            </p>
+        </div>
+
+        <!-- Navigation Button Section -->
+        <div class="button-section">
+            <button onclick="window.location.href='/main'" class="main-button">Go to the System</button>
+        </div>
+
+        <!-- Development Team Section -->
+        <div class="table-section">
+            <h2 class="table-title"><i class="fas fa-users"></i> System Development Team</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-user"></i> Name</th>
+                        <th><i class="fas fa-graduation-cap"></i> Class</th>
+                        <th>ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mustafa Alamori</td>
+                        <td>C1</td>
+                        <td>Mustafa_147759</td>
+                    </tr>
+                    <tr>
+                        <td>Yaman Mako</td>
+                        <td>C1</td>
+                        <td>Yaman_167323</td>
+                    </tr>
+                    <tr>
+                        <td>Mohamad Alrokbah</td>
+                        <td>C1</td>
+                        <td>Mohamad_154005</td>
+                    </tr>
+                    <tr>
+                        <td>Asma Hamdoni</td>
+                        <td>C2</td>
+                        <td>Asma_173921</td>
+                    </tr>
+                    <tr>
+                        <td>Raneem Kadan</td>
+                        <td>C2</td>
+                        <td>Raneem_164708</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>
+            <i class="fas fa-parking"></i> Parking Spots System | Designed under the supervision of
+            <strong>Dr. Issam Salman</strong>
+        </p>
+    </footer>
+
+</body>
+</html>

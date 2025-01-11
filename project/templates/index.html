@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Spot System</title>
+
+    <!-- Include external stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="background-effect"></div>
+<div class="soft-glow-background"></div>
+
+<!-- Header Section -->
+<header>
+    <h1><i class="fas fa-car"></i> Parking Spot System</h1>
+    <button onclick="window.location.href='/'" class="home-button"><i class="fas fa-home"></i> Home Page</button>
+</header>
+
+<!-- Intro Section -->
+<section id="intro-message">
+    <h2>Find Your Perfect Parking Spot</h2>
+    <p>Quickly locate, reserve, and navigate to the nearest parking space.</p>
+</section>
+
+<!-- Location Controls Section -->
+<section id="location-controls">
+    <div class="control-wrapper">
+        <!-- Button to locate user's current location -->
+        <button class="icon-button" onclick="getCurrentLocation()">
+            <i class="fas fa-map-marker-alt"></i> Locate Me
+        </button>
+
+        <!-- Input for address search -->
+        <div class="input-wrapper">
+            <input type="text" id="address-input" placeholder="Search for a location">
+            <i class="fas fa-search search-icon" onclick="setAddressLocation(event)"></i>
+        </div>
+    </div>
+
+    <!-- Button to find nearest parking spot -->
+    <button class="find-spot-button" onclick="findNearestParking()">
+        <i class="fas fa-parking"></i> Find Parking Spot
+    </button>
+</section>
+
+<!-- Map Container -->
+<div id="map"></div>
+
+<!-- Parking Spots List Section -->
+<section class="spots-list">
+    <h2><i class="fas fa-list"></i> Parking Spots</h2>
+    <div class="spots-grid">
+        <!-- Dynamically render parking spots -->
+        {% for spot in spots %}
+        <div class="spot-item {{ spot.status }}" onclick="focusOnSpot({{ spot.lat }}, {{ spot.lon }})">
+            <div class="spot-icon">
+                {% if spot.status == "available" %}
+                <i class="fas fa-check-circle"></i>
+                {% else %}
+                <i class="fas fa-times-circle"></i>
+                {% endif %}
+            </div>
+            <div class="spot-details">
+                <p><strong>ID:</strong> {{ spot.id }}</p>
+                <p><strong>Status:</strong> {{ spot.status | capitalize }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Footer Section -->
+<footer>
+    <p>
+        <i class="fas fa-parking"></i> Parking Spots System | Designed under the supervision of
+        <strong>Dr. Issam Salman</strong>
+    </p>
+</footer>
+
+<!-- Include external scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+    // Initialize map with default view
+    const map = L.map('map').setView([33.5138, 36.2765], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Load parking spots data
+    const spots = {{ spots|tojson }};
+    let userLocationMarker = null;
+
+    // Add parking spots to the map
+    spots.forEach(spot => {
+        const color = spot.status === 'available' ? 'green' : 'red';
+        L.circle([spot.lat, spot.lon], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.6,
+            radius: 30
+        }).addTo(map).bindPopup(`Spot ID: ${spot.id}<br>Status: ${spot.status}`);
+    });
+
+    // Focus map view on a specific parking spot
+    function focusOnSpot(lat, lon) {
+        map.setView([lat, lon], 18);
+    }
+
+    // Get user's current location
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const { latitude, longitude } = position.coords;
+                map.setView([latitude, longitude], 18);
+                L.marker([latitude, longitude]).addTo(map).bindPopup("You are here!").openPopup();
+            }, () => {
+                alert("Unable to retrieve your location.");
+            });
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    }
+
+    // Set map location based on address input
+    function setAddressLocation(event) {
+        event.preventDefault();
+        const address = document.getElementById('address-input').value;
+
+        fetch('/location', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ address: address })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+            } else {
+                const { lat, lon } = data;
+                map.setView([lat, lon], 18);
+                L.marker([lat, lon]).addTo(map).bindPopup("Location found!").openPopup();
+            }
+        })
+        .catch(error => {
+            console.error("Error finding location:", error);
+            alert("An error occurred while fetching the location.");
+        });
+    }
+
+    // Find the nearest parking spot using a server-side algorithm
+    function findNearestParking() {
+        const userLat = map.getCenter().lat;
+        const userLon = map.getCenter().lng;
+
+        fetch('/nearest-genetic', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ lat: userLat, lon: userLon })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.lat && data.lon) {
+                const nearestSpot = data;
+
+                if (userLocationMarker) {
+                    userLocationMarker.setLatLng([userLat, userLon]);
+                } else {
+                    userLocationMarker = L.circleMarker([userLat, userLon], {
+                        color: 'blue',
+                        radius: 8,
+                        fill: true,
+                        fillColor: 'blue',
+                        fillOpacity: 0.6
+                    }).addTo(map).bindPopup('Your Location').openPopup();
+                }
+
+                L.circleMarker([nearestSpot.lat, nearestSpot.lon], {
+                    color: 'green',
+                    radius: 8,
+                    fill: true,
+                    fillColor: 'green',
+                    fillOpacity: 0.6
+                }).addTo(map).bindPopup(`Nearest Spot: ID ${nearestSpot.id}<br>Status: ${nearestSpot.status}`).openPopup();
+
+                const bounds = L.latLngBounds([
+                    [userLat, userLon],
+                    [nearestSpot.lat, nearestSpot.lon]
+                ]);
+                map.fitBounds(bounds);
+            } else {
+                alert(data.message || "No available spots found.");
+            }
+        })
+        .catch(error => {
+            console.error("Error finding nearest parking:", error);
+            alert("An error occurred while fetching the nearest parking.");
+        });
+    }
+</script>
+
+</body>
+</html>

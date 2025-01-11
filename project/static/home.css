@@ -1,0 +1,200 @@
+/* General Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background-size: 400% 400%;
+    animation: backgroundScroll 12s ease-in-out infinite;
+    color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Background Animation for Body */
+@keyframes backgroundScroll {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Header Styling */
+header {
+    background: #203a43;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header h1 i {
+    color: #ff6b6b;
+    margin-right: 10px;
+    font-size: 1.8rem;
+}
+
+/* Main Content Styling */
+.description {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    text-align: justify;
+    direction: ltr;
+    width: 85%;
+    max-width: 1000px;
+    margin: 30px auto;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.description-title {
+    color: #ff6b6b;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Buttons Styling */
+.button-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+button {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Table Section Styling */
+.table-section {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.table-title {
+    font-size: 1.8rem;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 85%;
+    margin: 20px auto;
+    text-align: center;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+th {
+    background: #444;
+    color: white;
+    font-size: 1.3rem;
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+td {
+    color: #ddd;
+}
+
+/* Footer Styling */
+footer {
+    margin-top: 40px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #f4f4f4;
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+footer i {
+    color: #ff6b6b;
+    margin-right: 5px;
+}
+
+footer strong {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Background Effects */
+.background-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.background-effect::before,
+.background-effect::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent 60%);
+    animation: moveBubbles 12s infinite linear;
+    opacity: 0.5;
+    z-index: -1;
+}
+
+.background-effect::after {
+    animation: moveBubbles 15s infinite linear reverse;
+    opacity: 0.3;
+}
+
+/* Animation for Background Bubbles */
+@keyframes moveBubbles {
+    0% {
+        transform: translateY(100%) translateX(-50%);
+    }
+    100% {
+        transform: translateY(-100%) translateX(50%);
+    }
+}
